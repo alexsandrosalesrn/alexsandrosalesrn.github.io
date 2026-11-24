@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Alexsandro Sales</title>
+<meta name="description" content="Alexsandro Sales — Contabilidade, dados e automação. Ferramentas em Python, Apps Script, Power BI e IA para escritórios contábeis e empresas." />
+<meta property="og:title" content="Alexsandro Sales — Contabilidade + Dados + Automação" />
+<meta property="og:description" content="Ferramentas que transformam rotinas contábeis em processos automáticos." />
+<meta property="og:image" content="foto.jpg" />
+<link rel="icon" href="foto.jpg" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
+<style>
+:root{
+  --bg:#f6f4ef; --bg-2:#ecE9e1; --surface:#ffffff; --ink:#0f1a2a; --ink-2:#3a4657; --muted:#6b7482;
+  --line:rgba(15,26,42,.10); --line-2:rgba(15,26,42,.18);
+  --accent:#0d8a63; --accent-ink:#ffffff; --accent-soft:rgba(13,138,99,.10);
+  --gold:#b8862b; --term:#0c1420; --term-ink:#cfe9dd;
+  --shadow:0 1px 2px rgba(15,26,42,.05),0 10px 30px -12px rgba(15,26,42,.18);
+  --radius:16px;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#0a0f17; --bg-2:#0f1622; --surface:#121a27; --ink:#eef2f7; --ink-2:#c3cbd6; --muted:#8692a3;
+    --line:rgba(255,255,255,.08); --line-2:rgba(255,255,255,.16);
+    --accent:#2fd39b; --accent-ink:#04140d; --accent-soft:rgba(47,211,155,.12);
+    --gold:#e2b45c; --term:#060a10; --term-ink:#bfeedd;
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 14px 40px -16px rgba(0,0,0,.6);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0a0f17; --bg-2:#0f1622; --surface:#121a27; --ink:#eef2f7; --ink-2:#c3cbd6; --muted:#8692a3;
+  --line:rgba(255,255,255,.08); --line-2:rgba(255,255,255,.16);
+  --accent:#2fd39b; --accent-ink:#04140d; --accent-soft:rgba(47,211,155,.12);
+  --gold:#e2b45c; --term:#060a10; --term-ink:#bfeedd;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 14px 40px -16px rgba(0,0,0,.6);
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{
+  font-family:'Geist',system-ui,sans-serif;background:var(--bg);color:var(--ink);
+  line-height:1.6;overflow-x:hidden;transition:background .3s,color .3s;
+  background-image:
+    linear-gradient(var(--line) 1px,transparent 1px);
+  background-size:100% 32px;
+  background-attachment:fixed;
+}
+a{color:inherit}
+img{max-width:100%;display:block}
+.mono{font-family:'Geist Mono',ui-monospace,monospace}
+.serif{font-family:'Instrument Serif',Georgia,serif;font-weight:400}
+.wrap{max-width:1120px;margin:0 auto;padding:0 16px}
+@media(min-width:720px){.wrap{padding:0 32px}}
+
+/* ── NAV ── */
+.nav{position:sticky;top:0;z-index:50;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  background:color-mix(in srgb,var(--bg) 82%,transparent);border-bottom:1px solid var(--line)}
+.nav .wrap{display:flex;align-items:center;justify-content:space-between;height:70px;gap:12px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;font-weight:600;letter-spacing:-.01em}
+.brand-mark{width:32px;height:32px;border-radius:9px;background:var(--ink);color:var(--bg);
+  display:grid;place-items:center;font-family:'Instrument Serif',serif;font-size:19px;font-style:italic}
+.nav-links{display:none;gap:4px}
+@media(min-width:760px){.nav-links{display:flex}}
+.nav-links a{text-decoration:none;font-size:.88rem;color:var(--ink-2);padding:8px 12px;border-radius:8px;transition:background .2s}
+.nav-links a:hover{background:var(--accent-soft);color:var(--ink)}
+.nav-right{display:flex;gap:8px;align-items:center}
+.icon-btn{width:38px;height:38px;border-radius:10px;border:1px solid var(--line-2);background:var(--surface);
+  color:var(--ink);display:grid;place-items:center;cursor:pointer;transition:transform .15s}
+.icon-btn:hover{transform:translateY(-1px)}
+.icon-btn svg{width:18px;height:18px}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:11px 18px;border-radius:11px;font-weight:600;
+  font-size:.92rem;text-decoration:none;border:1px solid transparent;cursor:pointer;transition:transform .15s,box-shadow .2s,background .2s;
+  font-family:inherit}
+.btn:hover{transform:translateY(-2px)}
+.btn svg{width:18px;height:18px;flex-shrink:0}
+.btn-primary{background:var(--accent);color:var(--accent-ink);box-shadow:0 8px 24px -10px var(--accent)}
+.btn-ghost{background:var(--surface);border-color:var(--line-2);color:var(--ink)}
+.btn-sm{padding:8px 14px;font-size:.84rem}
+
+/* ── HERO ── */
+.hero{padding:28px 0 8px}
+.hero-grid{display:grid;gap:40px;align-items:center}
+@media(min-width:960px){.hero-grid{grid-template-columns:1.1fr .9fr;gap:56px}.hero{padding:44px 0 16px}}
+.eyebrow{display:inline-flex;margin-top:0;align-items:center;gap:8px;font-family:'Geist Mono',monospace;font-size:.76rem;
+  color:var(--accent);background:var(--accent-soft);padding:6px 12px;border-radius:100px;margin-bottom:22px}
+.eyebrow .dot{width:7px;height:7px;border-radius:50%;background:var(--accent);animation:pulse 2s infinite}
+.hero h1{font-size:clamp(2.4rem,7vw,4.4rem);line-height:1.02;letter-spacing:-.035em;font-weight:600;margin-bottom:22px}
+.hero h1 .serif{font-style:italic;color:var(--accent);letter-spacing:-.01em}
+.hero p.lead{font-size:clamp(1.02rem,2.2vw,1.18rem);color:var(--ink-2);max-width:560px;margin-bottom:30px}
+.hero-ctas{display:flex;flex-wrap:wrap;gap:10px}
+.nav-left{display:flex;align-items:center;gap:22px;min-width:0}
+.who{display:flex;align-items:center;gap:11px;text-decoration:none;min-width:0}
+.avatar{width:42px;height:42px;border-radius:50%;flex-shrink:0;background:linear-gradient(135deg,var(--accent),var(--gold));padding:2px;display:block}
+.avatar img{width:100%;height:100%;border-radius:50%;object-fit:cover;background:var(--surface)}
+.who-txt{display:flex;flex-direction:column;line-height:1.2;min-width:0}
+.who-txt strong{font-size:.95rem;letter-spacing:-.01em}
+.who-txt span{font-size:.76rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.nav-links{border-left:1px solid var(--line-2);padding-left:14px}
+
+/* Terminal card */
+.terminal{background:var(--term);border-radius:18px;box-shadow:var(--shadow);overflow:hidden;
+  border:1px solid rgba(255,255,255,.06);color:var(--term-ink)}
+.term-bar{display:flex;align-items:center;gap:7px;padding:12px 16px;border-bottom:1px solid rgba(255,255,255,.07)}
+.term-bar i{width:11px;height:11px;border-radius:50%;display:block}
+.term-bar i:nth-child(1){background:#ff5f57}.term-bar i:nth-child(2){background:#febc2e}.term-bar i:nth-child(3){background:#28c840}
+.term-bar span{margin-left:10px;font-family:'Geist Mono',monospace;font-size:.74rem;color:rgba(255,255,255,.45)}
+.term-body{padding:18px 18px 8px;font-family:'Geist Mono',monospace;font-size:.8rem;line-height:1.75;min-height:262px}
+.term-body .ln{white-space:pre-wrap;word-break:break-word}
+.term-body .c{color:rgba(255,255,255,.4)}
+.term-body .ok{color:#3ee0a5}
+.term-body .y{color:#f4c56b}
+.term-body .b{color:#7cc4ff}
+.caret{display:inline-block;width:8px;height:15px;background:#3ee0a5;vertical-align:-2px;animation:blink 1s steps(1) infinite}
+.term-kpis{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid rgba(255,255,255,.07)}
+.term-kpis div{padding:14px 16px;border-right:1px solid rgba(255,255,255,.07)}
+.term-kpis div:last-child{border-right:0}
+.term-kpis b{display:block;font-family:'Geist Mono',monospace;font-size:1.15rem;color:#fff;font-weight:500}
+.term-kpis small{font-size:.68rem;color:rgba(255,255,255,.45);text-transform:uppercase;letter-spacing:.06em}
+
+/* ── QUICK LINKS ── */
+.quick{display:grid;gap:10px;grid-template-columns:1fr 1fr;margin:8px 0 0}
+@media(min-width:720px){.quick{grid-template-columns:repeat(4,1fr)}}
+.ql{display:flex;align-items:center;gap:12px;padding:14px 16px;background:var(--surface);border:1px solid var(--line);
+  border-radius:14px;text-decoration:none;transition:transform .18s,border-color .2s,box-shadow .2s;box-shadow:var(--shadow)}
+.ql:hover{transform:translateY(-3px);border-color:var(--line-2)}
+.ql .ic{width:38px;height:38px;border-radius:10px;display:grid;place-items:center;flex-shrink:0;color:#fff}
+.ql .ic svg{width:20px;height:20px;fill:currentColor}
+.ql strong{display:block;font-size:.92rem;line-height:1.2}
+.ql small{font-size:.74rem;color:var(--muted)}
+.ic-wa{background:#25d366}.ic-li{background:#0a66c2}.ic-tg{background:#229ed9}.ic-pj{background:var(--ink);color:var(--bg)!important}
+
+/* ── SECTIONS ── */
+section{padding:72px 0}
+@media(min-width:960px){section{padding:104px 0}}
+.sec-head{display:flex;flex-wrap:wrap;align-items:end;justify-content:space-between;gap:18px;margin-bottom:36px}
+.kicker{font-family:'Geist Mono',monospace;font-size:.74rem;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px}
+.kicker b{color:var(--accent);font-weight:500}
+h2{font-size:clamp(1.9rem,4.6vw,3rem);line-height:1.05;letter-spacing:-.03em;font-weight:600}
+h2 .serif{font-style:italic;color:var(--accent)}
+.sec-sub{color:var(--ink-2);max-width:460px}
+
+/* ── STATS ── */
+.stats{display:grid;grid-template-columns:1fr 1fr;border:1px solid var(--line-2);border-radius:var(--radius);
+  background:var(--surface);overflow:hidden}
+@media(min-width:860px){.stats{grid-template-columns:repeat(4,1fr)}}
+.stat{padding:24px 22px;border-right:1px solid var(--line);border-bottom:1px solid var(--line)}
+.stat b{display:block;font-size:clamp(1.9rem,4vw,2.6rem);font-weight:600;letter-spacing:-.03em;line-height:1}
+.stat b em{font-style:normal;color:var(--accent)}
+.stat span{font-size:.84rem;color:var(--muted);display:block;margin-top:8px}
+
+/* ── PROJECTS ── */
+.filters{display:flex;flex-wrap:wrap;gap:8px}
+.chip{font-family:inherit;font-size:.84rem;padding:8px 14px;border-radius:100px;border:1px solid var(--line-2);
+  background:var(--surface);color:var(--ink-2);cursor:pointer;transition:all .2s}
+.chip:hover{color:var(--ink)}
+.chip.active{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.chip .n{font-family:'Geist Mono',monospace;font-size:.72rem;opacity:.6;margin-left:4px}
+.grid{display:grid;gap:14px}
+@media(min-width:680px){.grid{grid-template-columns:1fr 1fr}}
+@media(min-width:1000px){.grid{grid-template-columns:repeat(3,1fr)}}
+.card{position:relative;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:22px;
+  display:flex;flex-direction:column;gap:12px;cursor:pointer;text-align:left;font-family:inherit;color:inherit;
+  transition:transform .22s,border-color .22s,box-shadow .22s;box-shadow:var(--shadow);width:100%}
+.card:hover{transform:translateY(-4px);border-color:var(--accent)}
+.card.hide{display:none}
+.card.feat{border-color:color-mix(in srgb,var(--accent) 45%,transparent);background:linear-gradient(160deg,var(--accent-soft),var(--surface) 55%)}
+.card .mods{display:flex;flex-wrap:wrap;gap:6px}
+.card .mods span{font-size:.72rem;padding:3px 8px;border-radius:6px;border:1px solid var(--line-2);color:var(--ink-2)}
+.card-top{display:flex;justify-content:space-between;align-items:center}
+.card-ic{width:42px;height:42px;border-radius:11px;background:var(--accent-soft);color:var(--accent);display:grid;place-items:center;font-size:20px}
+.status{font-family:'Geist Mono',monospace;font-size:.68rem;padding:4px 9px;border-radius:100px;display:inline-flex;align-items:center;gap:6px}
+.status::before{content:'';width:6px;height:6px;border-radius:50%;background:currentColor}
+.st-prod{color:var(--accent);background:var(--accent-soft)}
+.st-dev{color:var(--gold);background:color-mix(in srgb,var(--gold) 14%,transparent)}
+.card h3{font-size:1.14rem;letter-spacing:-.015em;line-height:1.25}
+.card p{font-size:.9rem;color:var(--ink-2)}
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:auto;padding-top:6px}
+.tag{font-family:'Geist Mono',monospace;font-size:.7rem;padding:3px 8px;border-radius:6px;background:var(--bg-2);color:var(--ink-2)}
+.card .more{font-size:.8rem;color:var(--accent);font-weight:600}
+
+/* Modal */
+.modal{position:fixed;inset:0;z-index:100;display:none;align-items:flex-end;justify-content:center;
+  background:rgba(5,10,18,.55);backdrop-filter:blur(4px)}
+.modal.open{display:flex;animation:fade .2s}
+@media(min-width:720px){.modal{align-items:center;padding:24px}}
+.modal-box{background:var(--surface);width:100%;max-width:640px;max-height:92vh;overflow:auto;border-radius:20px 20px 0 0;
+  padding:28px 22px 30px;position:relative;animation:up .28s ease}
+@media(min-width:720px){.modal-box{border-radius:20px;padding:34px}}
+.modal-close{position:absolute;top:16px;right:16px}
+.modal-box h3{font-size:1.6rem;letter-spacing:-.02em;line-height:1.15;margin:12px 40px 10px 0}
+.modal-box .lbl{font-family:'Geist Mono',monospace;font-size:.7rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin:22px 0 8px}
+.modal-box p{color:var(--ink-2)}
+.flow{display:flex;flex-wrap:wrap;align-items:center;gap:6px}
+.flow .step{font-size:.82rem;padding:8px 12px;border-radius:9px;background:var(--bg-2);border:1px solid var(--line)}
+.flow .arr{color:var(--accent);font-family:'Geist Mono',monospace}
+.gains{list-style:none;display:grid;gap:8px}
+.gains li{display:flex;gap:10px;font-size:.92rem;color:var(--ink-2)}
+.gains li::before{content:'✓';color:var(--accent);font-weight:700}
+
+/* ── DEMO ── */
+.demo{display:grid;gap:18px}
+@media(min-width:900px){.demo{grid-template-columns:1fr 1fr}}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:26px;box-shadow:var(--shadow)}
+.field{margin-bottom:22px}
+.field label{display:flex;justify-content:space-between;font-size:.88rem;font-weight:500;margin-bottom:10px}
+.field label output{font-family:'Geist Mono',monospace;color:var(--accent)}
+input[type=range]{width:100%;accent-color:var(--accent);height:24px}
+.result{background:var(--ink);color:var(--bg);border-radius:var(--radius);padding:28px;display:flex;flex-direction:column;justify-content:space-between;gap:22px}
+.result .big{font-size:clamp(2.6rem,7vw,3.8rem);font-weight:600;letter-spacing:-.04em;line-height:1}
+.result .big small{font-size:1rem;font-weight:400;opacity:.6;letter-spacing:0}
+.result .rows{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.result .rows div{border-top:1px solid color-mix(in srgb,var(--bg) 18%,transparent);padding-top:12px}
+.result .rows b{font-family:'Geist Mono',monospace;font-size:1.15rem;font-weight:500;display:block}
+.result .rows span{font-size:.76rem;opacity:.6}
+.result .note{font-size:.76rem;opacity:.55}
+.result .btn-primary{align-self:flex-start}
+
+/* ── SERVICES ── */
+.svc{display:grid;gap:14px}
+@media(min-width:760px){.svc{grid-template-columns:1fr 1fr}}
+.svc-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:26px;display:flex;flex-direction:column;gap:12px;box-shadow:var(--shadow)}
+.svc-card .num{font-family:'Geist Mono',monospace;font-size:.76rem;color:var(--muted)}
+.svc-card h3{font-size:1.3rem;letter-spacing:-.02em}
+.svc-card ul{list-style:none;display:grid;gap:6px;margin:4px 0 8px}
+.svc-card li{font-size:.9rem;color:var(--ink-2);padding-left:18px;position:relative}
+.svc-card li::before{content:'';position:absolute;left:0;top:.62em;width:8px;height:1px;background:var(--accent)}
+.svc-card .btn{margin-top:auto;align-self:flex-start}
+
+/* ── SIMPLE AUTOMATION ── */
+.simple{margin-top:14px;background:var(--surface);border:1px dashed var(--line-2);border-radius:var(--radius);padding:26px;display:grid;gap:22px}
+@media(min-width:860px){.simple{grid-template-columns:1.5fr 1fr;align-items:center;padding:34px}}
+.simple h3{font-size:1.35rem;letter-spacing:-.02em;margin-bottom:10px}
+.simple p{color:var(--ink-2);font-size:.95rem;margin-bottom:10px}
+.simple-list{list-style:none;display:grid;gap:8px}
+.simple-list li{font-size:.92rem;padding:10px 14px;border-radius:10px;background:var(--accent-soft);color:var(--ink)}
+.simple-list li::before{content:'→ ';color:var(--accent);font-weight:700}
+
+/* ── STACK ── */
+.stack{display:flex;flex-wrap:wrap;gap:10px}
+.stack span{padding:10px 16px;border:1px solid var(--line-2);border-radius:12px;background:var(--surface);font-size:.92rem;display:flex;align-items:center;gap:8px}
+.stack span i{width:8px;height:8px;border-radius:2px;background:var(--accent);display:block}
+.stack span.k i{background:var(--gold)}
+.legend{display:flex;gap:18px;font-size:.8rem;color:var(--muted);margin-top:16px}
+.legend span{display:flex;align-items:center;gap:6px}
+.legend i{width:8px;height:8px;border-radius:2px;display:block}
+
+/* ── TIMELINE ── */
+.tl{position:relative;display:grid;gap:4px}
+.tl-item{display:grid;grid-template-columns:110px 1fr;gap:18px;padding:18px 0;border-bottom:1px solid var(--line)}
+@media(min-width:720px){.tl-item{grid-template-columns:170px 1fr}}
+.tl-item .when{font-family:'Geist Mono',monospace;font-size:.8rem;color:var(--muted);padding-top:3px}
+.tl-item h4{font-size:1.06rem;letter-spacing:-.01em}
+.tl-item p{font-size:.9rem;color:var(--ink-2)}
+.tl-item.now h4::after{content:'atual';font-family:'Geist Mono',monospace;font-size:.66rem;color:var(--accent);background:var(--accent-soft);padding:2px 8px;border-radius:100px;margin-left:10px;vertical-align:2px}
+
+/* ── CTA ── */
+.cta{background:var(--ink);color:var(--bg);border-radius:24px;padding:44px 26px;text-align:center;position:relative;overflow:hidden}
+@media(min-width:720px){.cta{padding:72px 48px}}
+.cta::before{content:'';position:absolute;inset:0;background:radial-gradient(600px 240px at 50% 0%,color-mix(in srgb,var(--accent) 35%,transparent),transparent 70%);pointer-events:none}
+.cta h2{position:relative;margin-bottom:14px}
+.cta h2 .serif{color:var(--accent)}
+.cta p{position:relative;opacity:.72;max-width:520px;margin:0 auto 28px}
+.cta .row{position:relative;display:flex;flex-wrap:wrap;justify-content:center;gap:10px}
+.cta .btn-ghost{background:transparent;color:var(--bg);border-color:color-mix(in srgb,var(--bg) 30%,transparent)}
+
+footer{padding:36px 0 48px;font-size:.82rem;color:var(--muted)}
+footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px}
+
+/* Floating WhatsApp */
+.fab{position:fixed;right:16px;bottom:16px;z-index:60;width:56px;height:56px;border-radius:50%;background:#25d366;color:#fff;
+  display:grid;place-items:center;box-shadow:0 10px 30px -8px rgba(37,211,102,.7);transition:transform .2s}
+.fab:hover{transform:scale(1.07)}
+.fab svg{width:28px;height:28px;fill:currentColor}
+
+/* Reveal */
+.rv{opacity:0;transform:translateY(18px);transition:opacity .7s ease,transform .7s ease}
+.rv.in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){.rv{opacity:1;transform:none;transition:none}*{animation:none!important}}
+
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 color-mix(in srgb,var(--accent) 60%,transparent)}50%{box-shadow:0 0 0 6px transparent}}
+@keyframes blink{50%{opacity:0}}
+@keyframes fade{from{opacity:0}}
+@keyframes up{from{transform:translateY(30px);opacity:0}}
+</style>
+</head>
+<body>
+
+<!-- ═══════════ NAV ═══════════ -->
+<nav class="nav">
+  <div class="wrap">
+    <div class="nav-left">
+      <a href="#topo" class="who" aria-label="Início">
+        <span class="avatar"><img src="data:image/jpeg;base64,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" alt="Alexsandro Sales" /></span>
+        <span class="who-txt"><strong>Alexsandro Sales</strong><span>Gestor Administrativo e Contábil</span></span>
+      </a>
+      <div class="nav-links">
+        <a href="#projetos">Projetos</a>
+        <a href="#servicos">Serviços</a>
+      </div>
+    </div>
+    <div class="nav-right">
+      <button class="icon-btn" id="themeBtn" aria-label="Alternar tema">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- ═══════════ HERO ═══════════ -->
+<header class="hero" id="topo">
+  <div class="wrap hero-grid">
+    <div>
+      <span class="eyebrow"><span class="dot"></span>Disponível para novos projetos</span>
+      <h1>Contabilidade que <span class="serif">roda sozinha.</span></h1>
+      <p class="lead">Atuo com contabilidade há mais de 13 anos e desenvolvo ferramentas em <strong>Python, Apps Script, Power BI e IA</strong> que eliminam o trabalho manual de escritórios contábeis e empresas: da leitura de extratos bancários aos dashboards de gestão.</p>
+      <div class="hero-ctas">
+        <a class="btn btn-primary" href="#projetos">Ver ferramentas
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      </div>
+    </div>
+
+    <div class="terminal rv" aria-hidden="true">
+      <div class="term-bar"><i></i><i></i><i></i><span>automacao_contabil.py</span></div>
+      <div class="term-body" id="term"></div>
+      <div class="term-kpis">
+        <div><b id="k1">0</b><small>Docs lidos</small></div>
+        <div><b id="k2">0</b><small>Lançamentos</small></div>
+        <div><b id="k3">0h</b><small>Poupadas</small></div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ═══════════ PROJECTS ═══════════ -->
+<section id="projetos" style="padding-top:56px">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <div>
+        <p class="kicker"><b>01</b> — Portfólio</p>
+        <h2>Ferramentas que <span class="serif">construí</span></h2>
+      </div>
+      <div class="filters" id="filters"></div>
+    </div>
+    <div class="grid" id="grid"></div>
+  </div>
+</section>
+
+<!-- ═══════════ SERVICES ═══════════ -->
+<section id="servicos" style="padding-top:0">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <div>
+        <p class="kicker"><b>02</b> — Serviços</p>
+        <h2>Como posso <span class="serif">ajudar</span></h2>
+      </div>
+      <p class="sec-sub">Atendo empresas e escritórios de contabilidade, com foco em resultado mensurável.</p>
+    </div>
+    <div class="svc" id="svc"></div>
+    <div class="simple rv">
+      <div>
+        <p class="kicker" style="margin-bottom:8px"><b>+</b> Complemento</p>
+        <h3>Automação de processos simples</h3>
+        <p>Nem toda automação precisa ser um sistema. Muitas vezes o maior ganho está nas tarefas pequenas que se repetem todo dia: um e-mail de lembrete, uma planilha que se preenche sozinha, um formulário que já vira documento, um arquivo renomeado e salvo na pasta certa.</p>
+        <p>Mapeio a rotina junto com você, identifico o que dá para automatizar e entrego uma solução enxuta, que roda nas ferramentas que sua equipe já usa, como Google Workspace, Excel e e-mail, sem custo de licença e sem mudar o jeito de trabalhar.</p>
+      </div>
+      <ul class="simple-list">
+        <li>Lembretes e alertas por e-mail</li>
+        <li>Planilhas que se atualizam sozinhas</li>
+        <li>Formulários que geram documentos</li>
+        <li>Organização automática de arquivos</li>
+        <li>Relatórios enviados no dia certo</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ STACK ═══════════ -->
+<section style="padding-top:0">
+  <div class="wrap rv">
+    <p class="kicker"><b>03</b> — Ferramentas do dia a dia</p>
+    <h2 style="margin-bottom:28px">Stack <span class="serif">técnica e contábil</span></h2>
+    <div class="stack">
+      <span><i></i>Python</span><span><i></i>Power BI</span><span><i></i>Excel avançado</span>
+      <span><i></i>Google Apps Script</span><span><i></i>IA generativa</span>
+      <span><i></i>VS Code</span><span><i></i>HTML / JS</span><span><i></i>Node.js</span>
+      <span class="k"><i></i>Domínio</span><span class="k"><i></i>Sistemas de gestão / ERPs</span><span class="k"><i></i>Conta Azul</span>
+      <span class="k"><i></i>Omie</span><span class="k"><i></i>Nibo</span>
+    </div>
+    <div class="legend">
+      <span><i style="background:var(--accent)"></i>Tecnologia</span>
+      <span><i style="background:var(--gold)"></i>Sistemas contábeis</span>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ CTA ═══════════ -->
+<section id="contato" style="padding-top:0">
+  <div class="wrap rv">
+    <div class="cta">
+      <h2>Tem uma rotina que <span class="serif">consome horas?</span></h2>
+      <p>Me conte o processo. Em uma conversa rápida eu digo se dá para automatizar e quanto tempo você ganha.</p>
+      <div class="row">
+        <a class="btn btn-primary" data-wa="Olá, Alexsandro! Vi seu site no Instagram e gostaria de conversar sobre as aplicações ou se pode desenvolver alguma." href="#">Conversar no WhatsApp</a>
+        <a class="btn btn-ghost" href="https://www.linkedin.com/in/alexsandro-sales-de-oliveira-b6007a31" target="_blank" rel="noopener">LinkedIn</a>
+        <a class="btn btn-ghost" href="https://t.me/AlexsandroSales" target="_blank" rel="noopener">Telegram</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <span>© <span id="yr"></span> Alexsandro Sales · Parnamirim/RN</span>
+    <span class="mono">contabilidade + dados + automação</span>
+  </div>
+</footer>
+
+
+<!-- Modal -->
+<div class="modal" id="modal" role="dialog" aria-modal="true">
+  <div class="modal-box">
+    <button class="icon-btn modal-close" id="mClose" aria-label="Fechar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+    <div id="mBody"></div>
+  </div>
+</div>
+
+<script>
+/* ════════ CONFIG ════════ */
+const WHATSAPP = '5584999501027';
+const wa = msg => `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg)}`;
+
+/* ════════ PROJECTS DATA ════════
+   Para adicionar um projeto, copie um bloco e edite.
+   cat: automacao | dados | ia | contabil      status: prod | dev          */
+const PROJECTS = [
+  /* ── ECOSSISTEMA 360 ── */
+  { ic:'📊', cat:'p360', status:'prod', title:'Painel 360',
+    desc:'Dashboard contábil, fiscal e trabalhista da carteira inteira, com score de saúde de cada cliente e alertas automáticos.',
+    problem:'O contador só descobre que o cliente estourou o limite do Simples, perdeu o Fator R ou tem férias vencendo quando já virou problema.',
+    flow:['Dados contábeis, fiscais e de DP','Motor de indicadores','Score e alertas','Painel por cliente ou carteira'],
+    mods:['Visão geral e score de saúde','DRE, balanço e indicadores','Fiscal: limites do Simples e Fator R','Trabalhista e férias','Obrigações do mês','Simulador de regimes e pró-labore','Projeções'],
+    gains:['Alertas antes do problema acontecer','Conversa consultiva com números na mão','Resumo executivo pronto para o cliente'],
+    tags:['JavaScript','Chart.js','Apps Script'] },
+  { ic:'⚙️', cat:'p360', status:'prod', title:'Central do Escritório/Empresa',
+    desc:'A operação do escritório/empresa no automático, rodando no Google Workspace e com os dados no seu próprio Drive.',
+    problem:'Documento que não chega, certificado que vence, cliente insatisfeito que ninguém percebeu: o gargalo é operacional, não técnico.',
+    flow:['Planilha-base','Apps Script com gatilhos','E-mails, PDFs e pastas','Registro de tudo'],
+    mods:['Cobrança escalonada de documentos','Portal do cliente para envio de arquivos','Onboarding com contrato pronto','Conciliação bancária que aprende','Relatório mensal em PDF','Alertas de DP e certificados','Pesquisa de satisfação (NPS)'],
+    gains:['Equipe livre de cobrança manual','Cliente com atendimento consultivo e padronizado','Tudo dentro do Google que o escritório/empresa já usa'],
+    tags:['Apps Script','Google Workspace','Forms'] },
+  { ic:'💸', cat:'p360', status:'prod', title:'Cobrança 360',
+    desc:'Suba a planilha de inadimplentes e o sistema cobra cada cliente por e-mail e WhatsApp, com a mensagem certa para cada etapa.',
+    problem:'Cobrar inadimplentes um a um consome horas, gera constrangimento e acaba sendo esquecido.',
+    flow:['Planilha (Excel/CSV)','Validação dos dados','Régua de cobrança','Envio em fila controlada','Histórico'],
+    mods:['Leitura automática das colunas','Régua: lembrete, vencimento, atraso e aviso final','E-mail com botão de pagamento e PIX','WhatsApp manual ou por API','Prévia e envio de teste','Histórico exportável'],
+    gains:['Recebimento mais rápido, sem esforço manual','Cobrança cordial e dentro do CDC','Mais um serviço para oferecer aos seus clientes'],
+    tags:['Node.js','E-mail','WhatsApp'] },
+
+  /* ── APPS SCRIPT ── */
+  { ic:'📝', cat:'apps', status:'prod', title:'Formulário que vira Documento',
+    desc:'O cliente responde um formulário e recebe de volta o documento final pronto: ficha, contrato ou cadastro, salvo e enviado sozinho.',
+    problem:'Informações chegam soltas por mensagem e alguém precisa redigitar tudo em um documento.',
+    flow:['Google Forms','Validação dos dados','Modelo com campos {{ }}','Documento final (Docs/PDF)','Pasta + e-mail ao responsável'],
+    gains:['Qualquer modelo vira automático: abertura de empresa, admissão, contrato','Zero redigitação e menos erro de cadastro','Documento arquivado na pasta certa e equipe avisada na hora'],
+    tags:['Apps Script','Forms','Docs'] },
+  { ic:'📂', cat:'apps', status:'prod', title:'Cobrança Mensal de Documentação',
+    desc:'E-mails automáticos em datas fixas do mês cobrando extratos e documentos que alimentam painéis e obrigações.',
+    problem:'Sem lembrete, os extratos atrasavam e travavam painéis gerenciais e entregas ao fiscal.',
+    flow:['Calendário do mês','Gatilho nos dias definidos','E-mail com layout da empresa','Confirmação da equipe'],
+    gains:['Documentação no prazo, todo mês','Fim da cobrança verbal repetida','Fluxo previsível para o fechamento'],
+    tags:['Apps Script','Gmail','Gatilhos'] },
+  { ic:'📅', cat:'apps', status:'prod', title:'Agenda Diária da Equipe',
+    desc:'Toda manhã de dia útil a equipe recebe um único e-mail com as ausências do dia, os aniversariantes e quem completa tempo de casa.',
+    problem:'Ausências eram descobertas na hora e datas importantes para as pessoas passavam em branco.',
+    flow:['Planilhas de ausências e colaboradores','Gatilho diário às 7h','Ausências, aniversários e tempo de casa','E-mail consolidado para a equipe'],
+    mods:['Folgas, férias e banco de horas do dia','Aniversariantes do dia','Tempo de casa (1, 2, 5 anos...)','Mensagem personalizada por ocasião'],
+    gains:['Equipe planeja o dia já sabendo quem está fora','Reconhecimento automático que fortalece o clima','Planilha simples, sem mexer no código'],
+    tags:['Apps Script','Sheets','Gmail'] },
+  { ic:'🤝', cat:'apps', status:'prod', title:'Relacionamento com Clientes',
+    desc:'Gestão comercial no automático: o sistema parabeniza clientes no aniversário e celebra cada ano de parceria contratual.',
+    problem:'Datas de aniversário e de contrato ficavam esquecidas, e o cliente só tinha notícias do escritório/empresa quando havia cobrança.',
+    flow:['Planilha de clientes e contratos','Gatilho diário','Aniversários e marcos de parceria','E-mail ao cliente + resumo ao comercial'],
+    mods:['Aniversário do cliente e dos sócios','Aniversário de contrato (1, 3, 5 anos...)','Aviso antecipado de renovação e reajuste','Resumo semanal para a equipe comercial'],
+    gains:['Cliente lembrado em datas que importam','Mais retenção e menos cancelamentos','Oportunidade de contato positivo antes do reajuste'],
+    tags:['Apps Script','Sheets','Gmail'] },
+  { ic:'⏰', cat:'apps', status:'prod', title:'Alertas de Fechamento e Prazos',
+    desc:'Alertas automáticos de fechamentos trimestrais e prazos internos, com a lista atualizada de empresas e responsáveis.',
+    problem:'Fechamentos trimestrais dependiam da memória de cada um.',
+    flow:['Planilha de controle','Calendário de alertas','E-mail com empresas e status','Equipe e gestão'],
+    gains:['Nenhum fechamento esquecido','Entra ou sai empresa: é só editar a planilha','Gestão acompanha tudo pelo e-mail'],
+    tags:['Apps Script','Sheets','Gmail'] },
+
+  /* ── PYTHON ── */
+  { ic:'📄', cat:'python', status:'prod', title:'Leitor Inteligente de Extratos',
+    desc:'Lê extratos bancários em PDF, padroniza os lançamentos e converte movimentações em dólar para real.',
+    problem:'Extratos chegam em PDF, em layouts diferentes e às vezes em moeda estrangeira, e tudo era digitado à mão.',
+    flow:['Extrato PDF','Parser Python','Conversão USD→BRL','Planilha de importação'],
+    gains:['Fim da digitação manual de extratos','Conversão cambial sem erro de cálculo','Arquivo pronto para importar no sistema contábil'],
+    tags:['Python','openpyxl','PDF'] },
+  { ic:'👥', cat:'python', status:'prod', title:'Monitor de Retiradas de Sócios',
+    desc:'Serviço que vigia a pasta de rede, lê extratos de dezenas de bancos e consolida retiradas e lucros por trimestre.',
+    problem:'Verificar pró-labore e distribuição de lucros em dezenas de empresas exigia conferência extrato a extrato.',
+    flow:['Pasta na rede','Watchdog (serviço)','Parsers por banco','Cruzamento com sócios','Relatório trimestral'],
+    gains:['Roda sozinho no servidor, 24/7','Planilha única e acumulativa por trimestre','Base para planejamento de distribuição de lucros'],
+    tags:['Python','Watchdog','Windows Server'] },
+  { ic:'💱', cat:'python', status:'prod', title:'Conversor de Extratos para OFX',
+    desc:'Converte extratos de carteiras digitais em OFX para conciliação automática no ERP financeiro.',
+    problem:'Bancos digitais não exportam OFX compatível, travando a conciliação bancária.',
+    flow:['Extrato da carteira','Normalização','Arquivo OFX','Conciliação no ERP'],
+    gains:['Conciliação automática habilitada','Menos lançamento manual no financeiro','Histórico padronizado'],
+    tags:['Python','OFX','ERP'] },
+  { ic:'🔍', cat:'python', status:'prod', title:'Consulta do Simples Nacional em Lote',
+    desc:'Informe uma lista de CNPJs e o robô consulta a situação no Simples Nacional de cada um, gerando a planilha de resultado.',
+    problem:'Consultar CNPJ por CNPJ no site da Receita leva horas em carteiras grandes.',
+    flow:['Planilha de CNPJs','Robô de navegação','Consulta na Receita','Planilha de resultados'],
+    gains:['Carteira inteira consultada sem cliques manuais','Apoio a enquadramento e onboarding','Execução com dois cliques no Windows'],
+    tags:['Python','Playwright','Excel'] },
+
+  /* ── DADOS & BI ── */
+  { ic:'📈', cat:'dados', status:'prod', title:'Dashboards Gerenciais para sua Empresa',
+    desc:'Painéis contábeis, fiscais e trabalhistas para você acompanhar resultado, prazos e produtividade em uma tela.',
+    problem:'Decisões tomadas sem visão consolidada dos números e dos prazos da empresa.',
+    flow:['Dados do sistema contábil','Modelagem','Power BI','Painel por área'],
+    gains:['Visão da empresa inteira em uma tela','Indicadores por área e responsável','Decisões baseadas em dados'],
+    tags:['Power BI','DAX','Excel'] },
+
+  /* ── CONTÁBIL ── */
+  { ic:'🔁', cat:'contabil', status:'prod', title:'Gerador de Lançamentos para Importação',
+    desc:'Transforma folha de pagamento, extratos e saldos em arquivos de importação no layout de qualquer sistema contábil ou ERP.',
+    problem:'Lançamentos recorrentes eram refeitos todo mês, conta por conta, em cada sistema.',
+    flow:['Relatório de origem','Mapa de rubricas e contas','Layout do sistema de destino','Arquivo de importação'],
+    gains:['Integração entre sistemas sem redigitação','Mapeamento reutilizável mês a mês','Adaptável a qualquer modelo de importação'],
+    tags:['Excel','Python','Integração'] },
+  { ic:'🔎', cat:'contabil', status:'prod', title:'Auditoria Preventiva em Relatório',
+    desc:'Relatórios interativos que apontam inconsistências contábeis antes do fechamento.',
+    problem:'Erros só apareciam no fechamento ou na entrega de obrigações, quando corrigir custa mais.',
+    flow:['Balancete','Testes de consistência','Pontos de atenção','Relatório HTML'],
+    gains:['Problemas detectados antes do prazo','Relatório claro para o cliente','Menos retrabalho em SPED'],
+    tags:['HTML','Análise contábil','SPED'] },
+];
+const CATS = { p360:'Ecossistema 360', apps:'Apps Script', python:'Python', dados:'Dados & BI', contabil:'Contábil', all:'Todos' };
+
+const SERVICES = [
+  { title:'Automação para escritórios/empresas', items:['Leitura automática de extratos','Integração entre sistemas contábeis','Robôs para rotinas repetitivas','Implantação e treinamento'],
+    msg:'Olá, Alexsandro! Quero automatizar rotinas do meu escritório/empresa.' },
+  { title:'Dashboards & BI', items:['Painéis financeiros e contábeis','Indicadores de produtividade','Resultado por unidade ou evento','Power BI sob medida'],
+    msg:'Olá, Alexsandro! Tenho interesse em dashboards / Power BI.' },
+];
+
+/* ════════ RENDER ════════ */
+const $ = s => document.querySelector(s);
+const grid = $('#grid'), filters = $('#filters');
+
+Object.entries(CATS).forEach(([k,v],i)=>{
+  const n = k==='all' ? PROJECTS.length : PROJECTS.filter(p=>p.cat===k).length;
+  if(!n) return;
+  const b = document.createElement('button');
+  b.className = 'chip' + (k==='p360'?' active':'');
+  b.innerHTML = `${v}<span class="n">${n}</span>`;
+  b.onclick = ()=>{
+    filters.querySelectorAll('.chip').forEach(c=>c.classList.remove('active'));
+    b.classList.add('active');
+    grid.querySelectorAll('.card').forEach(c=>c.classList.toggle('hide', k!=='all' && c.dataset.cat!==k));
+  };
+  filters.appendChild(b);
+});
+
+PROJECTS.forEach((p,i)=>{
+  const c = document.createElement('button');
+  c.className = 'card rv' + (p.cat==='p360'?' feat':''); c.dataset.cat = p.cat;
+  c.innerHTML = `
+    <div class="card-top"><span class="card-ic">${p.ic}</span>
+      <span class="status ${p.status==='prod'?'st-prod':'st-dev'}">${p.status==='prod'?'Em uso':'Em desenvolvimento'}</span></div>
+    <h3>${p.title}</h3><p>${p.desc}</p>
+    ${p.mods?`<div class="mods">${p.mods.map(m=>`<span>${m}</span>`).join('')}</div>`:''}
+    <div class="tags">${p.tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div>
+    <span class="more">Ver como funciona →</span>`;
+  c.onclick = ()=>openModal(p);
+  if(p.cat!=='p360') c.classList.add('hide');
+  grid.appendChild(c);
+});
+
+$('#svc').innerHTML = SERVICES.map((s,i)=>`
+  <div class="svc-card rv">
+    <span class="num">0${i+1}</span><h3>${s.title}</h3>
+    <ul>${s.items.map(x=>`<li>${x}</li>`).join('')}</ul>
+    <a class="btn btn-ghost btn-sm" href="${wa(s.msg)}" target="_blank" rel="noopener">Solicitar proposta →</a>
+  </div>`).join('');
+
+document.querySelectorAll('[data-wa]').forEach(a=>{ a.href = wa(a.dataset.wa); a.target='_blank'; a.rel='noopener'; });
+$('#yr').textContent = new Date().getFullYear();
+
+/* ════════ MODAL ════════ */
+const modal = $('#modal');
+function openModal(p){
+  $('#mBody').innerHTML = `
+    <span class="status ${p.status==='prod'?'st-prod':'st-dev'}">${p.status==='prod'?'Em uso':'Em desenvolvimento'}</span>
+    <h3>${p.ic} ${p.title}</h3><p>${p.desc}</p>
+    <p class="lbl">O problema</p><p>${p.problem}</p>
+    <p class="lbl">Como funciona</p>
+    <div class="flow">${p.flow.map((s,i)=>(i?'<span class="arr">→</span>':'')+`<span class="step">${s}</span>`).join('')}</div>
+    ${p.mods?`<p class="lbl">Módulos</p><ul class="gains">${p.mods.map(m=>`<li>${m}</li>`).join('')}</ul>`:''}
+    <p class="lbl">Resultado</p><ul class="gains">${p.gains.map(g=>`<li>${g}</li>`).join('')}</ul>
+    <p class="lbl">Tecnologias</p><div class="tags" style="padding:0">${p.tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div>
+    <a class="btn btn-primary" style="margin-top:26px" target="_blank" rel="noopener"
+       href="${wa('Olá, Alexsandro! Vi seu site no Instagram e gostaria de conversar sobre a aplicação "'+p.title+'" ou se pode desenvolver algo parecido.')}">Quero algo assim</a>`;
+  modal.classList.add('open'); document.body.style.overflow='hidden';
+}
+function closeModal(){ modal.classList.remove('open'); document.body.style.overflow=''; }
+$('#mClose').onclick = closeModal;
+modal.addEventListener('click', e=>{ if(e.target===modal) closeModal(); });
+document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeModal(); });
+
+/* ════════ TERMINAL ════════ */
+const LINES = [
+  ['c','# rotina mensal de fechamento'],
+  ['', '$ python automacao_contabil.py --mes atual'],
+  ['b','→ monitorando pasta de extratos...'],
+  ['', '  extrato_banco_A.pdf     <span class="ok">✓ 142 lançamentos</span>'],
+  ['', '  extrato_banco_B.pdf     <span class="ok">✓  87 lançamentos</span>'],
+  ['', '  fatura_usd.pdf          <span class="y">⇄ USD→BRL</span> <span class="ok">✓ 31</span>'],
+  ['', '  comprovantes.zip        <span class="ok">✓ 218 classificados</span>'],
+  ['b','→ gerando arquivo de importação...'],
+  ['ok','✓ concluído em 00:01:48 — 0 digitações manuais'],
+];
+const term = $('#term'); let li = 0;
+function counter(el,to,suf=''){ let s=null; const step=t=>{ if(!s)s=t; const k=Math.min((t-s)/900,1);
+  el.textContent=Math.round(to*k).toLocaleString('pt-BR')+suf; if(k<1)requestAnimationFrame(step); }; requestAnimationFrame(step); }
+function typeLine(){
+  if(li>=LINES.length){
+    term.insertAdjacentHTML('beforeend','<div class="ln"><span class="caret"></span></div>');
+    counter($('#k1'),6); counter($('#k2'),478); counter($('#k3'),12,'h');
+    setTimeout(()=>{ term.innerHTML=''; li=0; ['#k1','#k2'].forEach(k=>$(k).textContent='0'); $('#k3').textContent='0h'; typeLine(); }, 6000);
+    return;
+  }
+  const [cls,txt] = LINES[li++];
+  term.insertAdjacentHTML('beforeend',`<div class="ln ${cls}">${txt}</div>`);
+  setTimeout(typeLine, li===2?700:420);
+}
+setTimeout(typeLine, 500);
+
+/* ════════ STATS & REVEAL ════════ */
+const io = new IntersectionObserver(es=>es.forEach(e=>{
+  if(!e.isIntersecting) return;
+  e.target.classList.add('in');
+  e.target.querySelectorAll('[data-count]').forEach(b=>{
+    const em=b.querySelector('em'); counter(em,+b.dataset.count,b.dataset.suffix||'');
+  });
+  io.unobserve(e.target);
+}),{threshold:.12});
+document.querySelectorAll('.rv').forEach(el=>io.observe(el));
+
+/* ════════ THEME ════════ */
+const root = document.documentElement;
+try{ const t=localStorage.getItem('as-theme'); if(t) root.dataset.theme=t; }catch(e){}
+$('#themeBtn').onclick = ()=>{
+  const dark = root.dataset.theme ? root.dataset.theme==='dark' : matchMedia('(prefers-color-scheme: dark)').matches;
+  root.dataset.theme = dark ? 'light' : 'dark';
+  try{ localStorage.setItem('as-theme', root.dataset.theme); }catch(e){}
+};
+</script>
+</body>
+</html>
